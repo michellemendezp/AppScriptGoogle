@@ -1,0 +1,135 @@
+
+function GenerarPdf() {
+  //constantes
+  var colNombre = 1;
+  var colCedula = 2;
+  var colCelular = 3; 
+  var colDireccion = 4;
+  var colCorreo = 5;
+  var colFuncion = 7;
+  var colFechaE = 11
+  var colSueldo = 12
+
+  
+  //Id
+  //var plantillaId = "155OFN4MMrYx7SV5CewDUVNC9LTQYSSh1EKhtKA8pPHg";
+  var plantillaId = "1vHaLmWEpMpR1JdK0g82xTQ9JgnMPAZAOSCRgTGyvBRI";
+  var folderPdfId = "1himPdQsN0x-knoVe0ycvYRFVfQxmPdp9";
+  var folderTemporalId = "1o21L73JOBvkVZv5iaIHp2VKDi7vnx0Lv";
+
+  //Conexiones
+  //var docPlantilla = DocumentApp.openById(plantillaId);
+  var filePlantilla = DriveApp.getFileById(plantillaId);
+  var folderPDF = DriveApp.getFolderById(folderPdfId);
+  var folderTemporal = DriveApp.getFolderById(folderTemporalId);
+  var hojaList = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Hoja 1");
+
+  //Variable documento 
+  var rowActive = SpreadsheetApp.getActiveRange().getRow();
+  var nombre = hojaList.getRange(rowActive,colNombre).getValue();
+  var cedula = hojaList.getRange(rowActive,colCedula).getValue();
+  var celular = hojaList.getRange(rowActive,colCelular).getValue();
+  var direccion = hojaList.getRange(rowActive,colDireccion).getValue();
+  var correo = hojaList.getRange(rowActive,colCorreo).getValue();
+  var funcion = hojaList.getRange(rowActive,colFuncion).getValue();
+  var fechaE = hojaList.getRange(rowActive,colFechaE).getValue();
+  var sueldo = hojaList.getRange(rowActive,colSueldo).getValue();
+
+
+  //
+  var namefile = "Contrato " + nombre;
+  var fileTMPPlantilla = filePlantilla.makeCopy(namefile,folderTemporal);
+  var fileTMPPlantillaId = fileTMPPlantilla.getId();
+  var docTMPPlantilla = DocumentApp.openById(fileTMPPlantillaId);
+  
+  docTMPPlantilla.getBody().replaceText("{{nombre}}", nombre);
+  docTMPPlantilla.getBody().replaceText("{{cedula}}", cedula);
+  docTMPPlantilla.getBody().replaceText("{{sueldo}}", sueldo);  
+  docTMPPlantilla.getBody().replaceText("{{funcion}}", funcion);  
+  docTMPPlantilla.getBody().replaceText("{{direccion}}", direccion);  
+  docTMPPlantilla.getBody().replaceText("{{celular}}", celular);  
+  docTMPPlantilla.getBody().replaceText("{{correo}}", correo);  
+  docTMPPlantilla.getBody().replaceText("{{fechaE}}", fechaE);  
+  docTMPPlantilla.saveAndClose();
+
+  const pdfBlob = fileTMPPlantilla.getAs("application/pdf");
+  //const pdfBlob = fileTMPPlantilla.getAs(MimeType.pdf);
+  folderPDF.createFile(pdfBlob);
+
+};
+
+
+function onOpen(){
+  var ui = SpreadsheetApp.getUi();
+  var menu = ui.createMenu("Generar Reportes");
+  menu.addItem("archivo1","GenerarPdf").addToUi();
+  menu.addItem("Generar NDA","GenerarNDA").addToUi();
+}
+
+/*
+function GenerarPdf() {
+  var spreadsheet = SpreadsheetApp.getActive();
+  spreadsheet.getRange('A5').activate();
+};
+*/
+
+function GenerarNDA() {
+  //constantes
+  var colNombre = 1;
+  var colCedula = 2;
+  var colCelular = 3; 
+  var colDireccion = 4;
+  var colCorreo = 5;
+  var colFuncion = 7;
+  var colFechaE = 11
+  var colSueldo = 12
+
+  
+  //Id
+  //var plantillaId = "155OFN4MMrYx7SV5CewDUVNC9LTQYSSh1EKhtKA8pPHg";
+  var plantillaId = "1_PLPONnrtTt08W0vQ9Ve8jmetlXgFiw6JhbMIqbCQ28";
+  //var folderPdfId = "1himPdQsN0x-knoVe0ycvYRFVfQxmPdp9";
+  var folderPdfId = "1ra_uJfGoo9Mxhfw5CeFTRLipm2ArAGYf";//para pruebas CM
+  //var folderTemporalId = "1o21L73JOBvkVZv5iaIHp2VKDi7vnx0Lv";
+  var folderTemporalId = "1svIM63g7luVeCpaAiKdORxYddeVHYOxO";//para pruebas CM
+
+  //Conexiones
+  //var docPlantilla = DocumentApp.openById(plantillaId);
+  var filePlantilla = DriveApp.getFileById(plantillaId);
+  var folderPDF = DriveApp.getFolderById(folderPdfId);
+  var folderTemporal = DriveApp.getFolderById(folderTemporalId);
+  var hojaList = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Hoja 1");
+
+  //Variable documento 
+  var rowActive = SpreadsheetApp.getActiveRange().getRow();
+  var nombre = hojaList.getRange(rowActive,colNombre).getValue();
+  var cedula = hojaList.getRange(rowActive,colCedula).getValue();
+  var celular = hojaList.getRange(rowActive,colCelular).getValue();
+  var direccion = hojaList.getRange(rowActive,colDireccion).getValue();
+  var correo = hojaList.getRange(rowActive,colCorreo).getValue();
+  var funcion = hojaList.getRange(rowActive,colFuncion).getValue();
+  var fechaE = hojaList.getRange(rowActive,colFechaE).getValue();
+  var sueldo = hojaList.getRange(rowActive,colSueldo).getValue();
+
+
+  //
+  var namefile = "NDA " + nombre;
+  var fileTMPPlantilla = filePlantilla.makeCopy(namefile,folderTemporal);
+  var fileTMPPlantillaId = fileTMPPlantilla.getId();
+  var docTMPPlantilla = DocumentApp.openById(fileTMPPlantillaId);
+  
+  docTMPPlantilla.getBody().replaceText("{{nombre}}", nombre);
+  docTMPPlantilla.getBody().replaceText("{{cedula}}", cedula);
+  docTMPPlantilla.getBody().replaceText("{{sueldo}}", sueldo);  
+  docTMPPlantilla.getBody().replaceText("{{funcion}}", funcion);  
+  docTMPPlantilla.getBody().replaceText("{{direccion}}", direccion);  
+  docTMPPlantilla.getBody().replaceText("{{celular}}", celular);  
+  docTMPPlantilla.getBody().replaceText("{{correo}}", correo);  
+  docTMPPlantilla.getBody().replaceText("{{fechaE}}", fechaE);  
+  docTMPPlantilla.saveAndClose();
+
+  const pdfBlob = fileTMPPlantilla.getAs("application/pdf");
+  //const pdfBlob = fileTMPPlantilla.getAs(MimeType.pdf);
+  folderPDF.createFile(pdfBlob);
+
+};
